@@ -23,7 +23,7 @@ class Ball:
         self.velocity_y = LAUNCH_SPEED_Y
         self.radius = 10.5 if ball_type == 1 else 20.5
         self.stopped = (direction == 0)
-         
+
     def update(self):
         if self.stopped:
             return
@@ -45,7 +45,10 @@ class Ball:
     def handle_collision(self, group, other):
         if group == 'boy:ball':
             game_world.remove_object(self)
+        elif group == 'zombie:ball':
+            if not self.stopped:
+                game_world.remove_object(self)
         elif group == 'grass:ball':
             if not self.stopped:
                 self.stopped = True
-                self.y = other.get_bb()[3] + self.radius 
+                self.y = other.get_bb()[3] + self.radius

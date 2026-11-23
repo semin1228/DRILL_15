@@ -193,9 +193,6 @@ class Boy:
     def handle_collision(self, group, other):
         if group == 'boy:ball':
             pass
-        elif group == 'zombie:ball':
-            if not self.stopped:
-                game_world.remove_object(self)
         elif group == 'boy:zombie':
             print('GAME OVER')
             game_framework.quit()
