@@ -141,14 +141,11 @@ class Boy:
         if self.item is None or self.ball_count <= 0:
             return
         self.ball_count -= 1
-        # [과제] y + 60 은 큰 공(반지름 20.5)이면 소년 박스와 바로 겹친다 -> 슬라이드처럼 y + 100
-        ball = Ball(self.x + self.face_dir * 40, self.y + 60, self.face_dir,
+        ball = Ball(self.x + self.face_dir * 40, self.y + 100, self.face_dir,
                     1 if self.item == 'Ball' else 2)
         game_world.add_oject(ball)
-        # [과제] 던진 공은 지금 어떤 충돌 그룹에도 없다. 게임 중에 생긴 객체라 여기서 바로 등록:
-        #   game_world.add_collision_pairs('grass:ball', None, ball)
-        #   game_world.add_collision_pairs('boy:ball', None, ball)
-        #   game_world.add_collision_pairs('zombie:ball', None, ball)   (좀비 문제일 때)
+        game_world.add_collision_pairs('grass:ball', None, ball)
+        game_world.add_collision_pairs('boy:ball', None, ball)
 
     def pause(self):
         self.pressed_keys.clear()
@@ -156,8 +153,6 @@ class Boy:
             self.dir = 0
             self.stop_run()
 
-    # [과제] 새 키(예: b 로 공 종류 바꾸기)는 맨 앞에 if ... SDLK_b: ...; return
-    #        (아래 방향키 검사에서 다른 키는 return 되므로 반드시 그 앞에)
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
             self.states[self.state].space(self)
@@ -194,11 +189,6 @@ class Boy:
     def get_bb(self):
         return self.x - 25, self.y - 50, self.x + 25, self.y + 50
 
-    # [과제] 새 그룹은 elif 로 추가
-    #   'boy:zombie' 게임 종료      : game_framework.quit()
-    #   'boy:zombie' 공 뺏김/튕김   : 닿아 있는 동안 매 프레임 호출 -> get_time() 으로 1초 무적,
-    #                                 또는 좀비 박스(other.get_bb()) 바깥으로 self.x 를 옮긴다
-    #   'boy:trigger'                : 한 번만 발동하려면 트리거 쪽에서 자기 삭제
     def handle_collision(self, group, other):
         if group == "boy:ball":
             self.ball_count += 1
