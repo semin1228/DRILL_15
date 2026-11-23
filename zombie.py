@@ -60,3 +60,5 @@ class Zombie:
         half = self.size / 2
         return self.x - half, self.y - half, self.x + half, self.y + half
 
+    def handle_collision(self, group, other):
+        pass
