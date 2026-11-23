@@ -196,3 +196,7 @@ class Boy:
         elif group == 'zombie:ball':
             if not self.stopped:
                 game_world.remove_object(self)
+        elif group == 'boy:zombie':
+            print('GAME OVER')
+            game_framework.quit()
+
